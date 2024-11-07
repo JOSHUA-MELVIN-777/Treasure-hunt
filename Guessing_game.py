@@ -35,5 +35,5 @@ if st.button("Submit Guess"):
         st.session_state.attempts = 0
         st.session_state.numbers_tried = []
 
-if st.session_state.guessed_numbers:
+if st.session_state.numbers_tried:
     st.write("Your guesses:", st.session_state.numbers_tried)
