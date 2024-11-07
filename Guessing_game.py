@@ -1,42 +1,39 @@
 import streamlit as st
+import random
+st.title("Guessing Game")
+st.write("Guess a number btw 1 - 15\nYou have 5 attempts")
+if "number_to_guess" not in st.session_state:
+    st.session_state.number_to_guess=random.randint(1,15)
+if "attempts" not in st.session_state:
+    st.session_state.attempts=0
+if "numbers_tried" not in st.session_state:
+    st.session_state.numbers_tried=[]
 
-for i in ["name","age","mail"]:
-    if i not in st.session_state:
-        st.session_state[i]=""
-# def save():
-#     dict1={"Name":name,"Age":age,"Mail":mail}
-#     for i in ["name","age","mail"]:
-#         st.session_state[i]=dict1[i]
+user_guess=st.number_input("Guess the number",min_value=0,max_value=15,step=1)
 
-name=st.text_input("Name")
-age=st.text_input("Age")
-mail=st.text_input("Mail")
+if st.button("Submit Guess"):
 
-#st.button(label="Save",on_click=save)
+    st.session_state.attempts += 1
+    st.session_state.guessed_numbers.append(user_guess)
 
-def ggame(list,target):
-    left=0
-    right=len(list)-1
+    if user_guess < st.session_state.number_to_guess:
+        st.write("Too low! Try again.")
+    elif user_guess > st.session_state.number_to_guess:
+        st.write("Too high! Try again.")
+    else:
+        st.write("Congratulations! You've guessed the number!")
+        st.session_state.number_to_guess = random.randint(1, 15)
+        st.session_state.attempts = 0
+        st.session_state.guessed_numbers = []
 
-    while left<=right:
-        mid=(left+right)//2
+    attempts_left = 5 - st.session_state.attempts
+    if attempts_left > 0:
+        st.write(f"You have {attempts_left} attempts left.")
+    else:
+        st.write(f"Game over! The number was {st.session_state.number_to_guess}.")
+        st.session_state.number_to_guess = random.randint(1, 15)
+        st.session_state.attempts = 0
+        st.session_state.guessed_numbers = []
 
-        if list[mid]==target:
-            print("Congratulations!!!")
-            break
-
-        elif list[mid]<target:
-            left=mid+1
-
-        else:
-            right=mid-1
-
-    print("Number not in list")
-
-def create_list():
-    max=st.text_input("Enter maximum number from 0")
-    list=[]
-    for i in range(0,int(max)+1):
-        list.append(i)
-
-st.button("Start",on_click=create_list)
+if st.session_state.guessed_numbers:
+    st.write("Your guesses:", st.session_state.guessed_numbers)
