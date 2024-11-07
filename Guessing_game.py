@@ -14,7 +14,7 @@ user_guess=st.number_input("Guess the number",min_value=0,max_value=15,step=1)
 if st.button("Submit Guess"):
 
     st.session_state.attempts += 1
-    st.session_state.numbers_tried(user_guess)
+    st.session_state.numbers_tried.append(user_guess)
 
     if user_guess < st.session_state.number_to_guess:
         st.write("Too low! Try again.")
